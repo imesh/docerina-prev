@@ -187,7 +187,7 @@ public class HtmlDocumentWriter implements DocumentWriter {
                         if (type.getPkgPath() != null) {
                             return "../html/" + type.getPkgPath() + ".html#" + type.getName();
                         }
-                        return "#" + type.getName();
+                        return "primitives.html#" + type.getName();
                     });
             Template template = handlebars.compile(templateName);
 

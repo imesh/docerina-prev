@@ -28,7 +28,7 @@
 						    <h2>Primitive Types</h2>
                             <ul>
                                 {{#each this}}
-                                    <h2>{{primitiveAnnotation this "type"}}</h2>
+                                    <h2 id="{{primitiveAnnotation this "type"}}">{{primitiveAnnotation this "type"}}</h2>
                                 <table>
                                     <tr><th style="width: 150px">Description</th>
                                         <td>{{primitiveAnnotation this "description"}}</td></tr>

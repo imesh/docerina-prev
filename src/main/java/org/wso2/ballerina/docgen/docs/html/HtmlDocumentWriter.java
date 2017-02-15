@@ -29,6 +29,7 @@ import org.wso2.ballerina.core.model.BallerinaFunction;
 import org.wso2.ballerina.core.model.Package;
 import org.wso2.ballerina.core.model.ParameterDef;
 import org.wso2.ballerina.core.model.SymbolName;
+import org.wso2.ballerina.core.model.annotations.BallerinaPrimitive;
 import org.wso2.ballerina.docgen.docs.DocumentWriter;
 
 import java.io.File;
@@ -44,6 +45,7 @@ public class HtmlDocumentWriter implements DocumentWriter {
 
     private static final String HTML = ".html";
     private static final String INDEX_HTML = "index.html";
+    private static final String PRIMITIVES_HTML = "primitives.html";
     private static final String UTF_8 = "UTF-8";
 
     private static PrintStream out = System.out;
@@ -52,11 +54,13 @@ public class HtmlDocumentWriter implements DocumentWriter {
     public static final String HTML_OUTPUT_PATH_KEY = "html.output.path";
     public static final String TEMPLATES_FOLDER_PATH_KEY = "templates.folder.path";
     public static final String INDEX_TEMPLATE_NAME_KEY = "index.template.name";
+    public static final String PRIMITIVES_TEMPLATE_NAME_KEY = "primitives.template.name";
 
     private String templatesFolderPath;
     private String outputFilePath;
     private String packageTemplateName;
     private String indexTemplateName;
+    private String primitivesTemplateName;
 
     public HtmlDocumentWriter() {
         String userDir = System.getProperty("user.dir");
@@ -66,10 +70,11 @@ public class HtmlDocumentWriter implements DocumentWriter {
                 userDir + File.separator + "templates" + File.separator + "html");
         this.packageTemplateName = System.getProperty(PACKAGE_TEMPLATE_NAME_KEY, "package");
         this.indexTemplateName = System.getProperty(INDEX_TEMPLATE_NAME_KEY, "index");
+        this.primitivesTemplateName = System.getProperty(PRIMITIVES_TEMPLATE_NAME_KEY, "primitives");
     }
 
     @Override
-    public void write(Collection<Package> packages) {
+    public void write(Collection<Package> packages, Collection<BallerinaPrimitive> primitives) {
         if (packages == null || packages.size() == 0) {
             out.println("No package definitions found!");
             return;
@@ -82,6 +87,10 @@ public class HtmlDocumentWriter implements DocumentWriter {
         }
         String filePath = outputFilePath + File.separator + INDEX_HTML;
         writeHtmlDocument(packages, indexTemplateName, filePath);
+
+        out.println("Generating HTML primitives API documentation...");
+        filePath = outputFilePath + File.separator + PRIMITIVES_HTML;
+        writeHtmlDocument(primitives, primitivesTemplateName, filePath);
     }
 
     /**
@@ -140,7 +149,7 @@ public class HtmlDocumentWriter implements DocumentWriter {
                                     }
                                 }
                                 return "";
-                    })
+                            })
                     // usage: {{oneValueAnnotation "<annotationName>"}}
                     // eg: {{oneValueAnnotation "description"}} - this would retrieve the description annotation of the
                     // currentObject
@@ -152,6 +161,24 @@ public class HtmlDocumentWriter implements DocumentWriter {
                             if (annotationName.equalsIgnoreCase(annotation.getName())) {
                                 return annotation.getValue().trim();
                             }
+                        }
+                        return "";
+                    })
+                    // usage: {{primitiveAnnotation "<propertyName>"}}
+                    .registerHelper("primitiveAnnotation", (Helper<BallerinaPrimitive>) (primitive, options) -> {
+                        if (primitive == null) {
+                            return null;
+                        }
+
+                        String propertyName = options.param(0);
+                        if ("type".equals(propertyName)) {
+                            return primitive.type();
+                        } else if ("description".equals(propertyName)) {
+                            return primitive.description();
+                        } else if ("defaultValue".equals(propertyName)) {
+                            return primitive.defaultValue();
+                        } else if ("usage".equals(propertyName)) {
+                            return primitive.usage();
                         }
                         return "";
                     })

@@ -18,6 +18,7 @@
 package org.wso2.ballerina.docgen.docs;
 
 import org.wso2.ballerina.core.model.Package;
+import org.wso2.ballerina.core.model.annotations.BallerinaPrimitive;
 
 import java.util.Collection;
 
@@ -26,5 +27,9 @@ import java.util.Collection;
  */
 public interface DocumentWriter {
 
-    void write(Collection<Package> balPackage);
+    /**
+     * Write API document files for ballerina packages and primitives.
+     * @param packages
+     */
+    void write(Collection<Package> packages, Collection<BallerinaPrimitive> primitives);
 }

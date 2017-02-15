@@ -35,7 +35,7 @@ public class BallerinaDocGenTest {
     @Test(description = "Test Single Bal file")
     public void testSingleBalFile() {
         try {
-            Map<String, Package> docsMap = BallerinaDocGeneratorMain
+            Map<String, Package> docsMap = BallerinaDocGenerator
                     .generatePackageDocsFromBallerina("src/test/resources/balFiles/helloWorld.bal");
             Assert.assertNotNull(docsMap);
             Assert.assertEquals(docsMap.size(), 1);
@@ -49,7 +49,7 @@ public class BallerinaDocGenTest {
     @Test(description = "Test a folder with Bal files")
     public void testFolderWithBalFile() {
         try {
-            Map<String, Package> docsMap = BallerinaDocGeneratorMain
+            Map<String, Package> docsMap = BallerinaDocGenerator
                     .generatePackageDocsFromBallerina("src/test/resources/balFiles/balFolder");
             Assert.assertNotNull(docsMap);
             // this folder has 3 bal files. 2 bal files out of those are in same package.

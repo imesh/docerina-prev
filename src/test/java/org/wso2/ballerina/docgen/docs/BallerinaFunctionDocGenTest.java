@@ -41,7 +41,7 @@ public class BallerinaFunctionDocGenTest {
     public void testABalWithOneFunction() {
         try {
             Map<String, Package> docsMap =
-                    BallerinaDocGeneratorMain.generatePackageDocsFromBallerina(resources + "helloWorld.bal");
+                    BallerinaDocGenerator.generatePackageDocsFromBallerina(resources + "helloWorld.bal");
             Assert.assertNotNull(docsMap);
             Assert.assertEquals(docsMap.size(), 1);
             BallerinaDocGenTestUtils.printDocMap(docsMap);
@@ -64,7 +64,7 @@ public class BallerinaFunctionDocGenTest {
     public void testABalWithMultipleFunctions() {
         try {
             Map<String, Package> docsMap =
-                    BallerinaDocGeneratorMain.generatePackageDocsFromBallerina(resources + "balWith2Functions.bal");
+                    BallerinaDocGenerator.generatePackageDocsFromBallerina(resources + "balWith2Functions.bal");
             Assert.assertNotNull(docsMap);
             Assert.assertEquals(docsMap.size(), 1);
             BallerinaDocGenTestUtils.printDocMap(docsMap);

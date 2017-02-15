@@ -38,7 +38,7 @@ public class BallerinaStructDocGenTest {
     public void testStruct() {
         try {
             Map<String, Package> docsMap =
-                    BallerinaDocGeneratorMain.generatePackageDocsFromBallerina(resources + "balWithStruct.bal");
+                    BallerinaDocGenerator.generatePackageDocsFromBallerina(resources + "balWithStruct.bal");
             Assert.assertNotNull(docsMap);
             Assert.assertEquals(docsMap.size(), 1);
 

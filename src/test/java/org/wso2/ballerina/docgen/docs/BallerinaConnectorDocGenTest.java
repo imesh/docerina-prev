@@ -38,7 +38,7 @@ public class BallerinaConnectorDocGenTest {
     @Test(description = "Test single action in a connector file")
     public void testConnectorWithSingleAction() {
         try {
-            Map<String, Package> docsMap = BallerinaDocGeneratorMain
+            Map<String, Package> docsMap = BallerinaDocGenerator
                     .generatePackageDocsFromBallerina(resources + "helloWorldConnector.bal");
             Assert.assertNotNull(docsMap);
             Assert.assertEquals(docsMap.size(), 1);
@@ -67,7 +67,7 @@ public class BallerinaConnectorDocGenTest {
     @Test(description = "Test single action in a connector file")
     public void testConnectorWithMultipleAction() {
         try {
-            Map<String, Package> docsMap = BallerinaDocGeneratorMain
+            Map<String, Package> docsMap = BallerinaDocGenerator
                     .generatePackageDocsFromBallerina(resources + "balWith2Actions.bal");
 
             Assert.assertNotNull(docsMap);

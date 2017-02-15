@@ -20,11 +20,13 @@ package org.wso2.ballerina.docgen.docs;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.wso2.ballerina.core.model.Package;
+import org.wso2.ballerina.core.model.annotations.BallerinaPrimitive;
 import org.wso2.ballerina.docgen.docs.html.HtmlDocumentWriter;
 import org.wso2.ballerina.docgen.docs.utils.BallerinaDocGenTestUtils;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -46,19 +48,20 @@ public class HtmlDocumentWriterTest {
         String outputFilePath2 = outputPath + File.separator + "foo.bar.xyz.html";
         String outputFilePath3 = outputPath + File.separator + "foo.bar.xyz.str.html";
         String indexOutputFilePath = outputPath + File.separator + "index.html";
+        String primitivesOutputFilePath = outputPath + File.separator + "primitives.html";
 
         try {
             // Delete if file already exists
-            deleteFile(outputFilePath1);
-            deleteFile(outputFilePath2);
-            deleteFile(outputFilePath3);
-            deleteFile(indexOutputFilePath);
+            deleteFiles(outputFilePath1, outputFilePath2, outputFilePath3, indexOutputFilePath,
+                    primitivesOutputFilePath);
 
             // Generate HTML file
             Map<String, Package> packageMap =
-                    BallerinaDocGeneratorMain.generatePackageDocsFromBallerina(balPackagePath);
+                    BallerinaDocGenerator.generatePackageDocsFromBallerina(balPackagePath);
+            List<BallerinaPrimitive> primitives = BallerinaDocGenerator.findPrimitiveTypes();
+
             HtmlDocumentWriter htmlDocumentWriter = new HtmlDocumentWriter();
-            htmlDocumentWriter.write(packageMap.values());
+            htmlDocumentWriter.write(packageMap.values(), primitives);
 
             // Assert file creation
             File htmlFile1 = new File(outputFilePath1);
@@ -69,6 +72,8 @@ public class HtmlDocumentWriterTest {
             Assert.assertTrue(htmlFile3.exists());
             File indexHtmlFile = new File(indexOutputFilePath);
             Assert.assertTrue(indexHtmlFile.exists());
+            File primitivesHtmlFile = new File(primitivesOutputFilePath);
+            Assert.assertTrue(primitivesHtmlFile.exists());
 
             // Assert function definitions
             String content1 = new Scanner(htmlFile1).useDelimiter("\\Z").next();
@@ -120,14 +125,26 @@ public class HtmlDocumentWriterTest {
             String content4 = new Scanner(indexHtmlFile).useDelimiter("\\Z").next();
             Assert.assertTrue(content4.contains("foo.bar"));
             Assert.assertTrue(content4.contains("foo.bar.xyz"));
+
+            // Assert primitives in primitives.html
+            String primitivesContent = new Scanner(primitivesHtmlFile).useDelimiter("\\Z").next();
+            Assert.assertTrue(primitivesContent.contains("array"));
+            Assert.assertTrue(primitivesContent.contains("boolean"));
+            Assert.assertTrue(primitivesContent.contains("struct"));
+            Assert.assertTrue(primitivesContent.contains("string"));
+            Assert.assertTrue(primitivesContent.contains("xml"));
+            Assert.assertTrue(primitivesContent.contains("connector"));
+            Assert.assertTrue(primitivesContent.contains("message"));
+            Assert.assertTrue(primitivesContent.contains("json"));
+            Assert.assertTrue(primitivesContent.contains("map"));
+            Assert.assertTrue(primitivesContent.contains("int"));
+            Assert.assertTrue(primitivesContent.contains("double"));
         } catch (Exception e) {
             Assert.fail(e.getMessage());
         } finally {
             BallerinaDocGenTestUtils.cleanUp();
-            deleteFile(outputFilePath1);
-            deleteFile(outputFilePath2);
-            deleteFile(outputFilePath3);
-            deleteFile(indexOutputFilePath);
+            deleteFiles(outputFilePath1, outputFilePath2, outputFilePath3, indexOutputFilePath,
+                    primitivesOutputFilePath);
         }
     }
 
@@ -149,9 +166,11 @@ public class HtmlDocumentWriterTest {
 
             // Generate HTML file
             Map<String, Package> packageMap =
-                    BallerinaDocGeneratorMain.generatePackageDocsFromBallerina(balPackagePath, "foo.bar.xyz");
+                    BallerinaDocGenerator.generatePackageDocsFromBallerina(balPackagePath, "foo.bar.xyz");
+            List<BallerinaPrimitive> primitives = BallerinaDocGenerator.findPrimitiveTypes();
+
             HtmlDocumentWriter htmlDocumentWriter = new HtmlDocumentWriter();
-            htmlDocumentWriter.write(packageMap.values());
+            htmlDocumentWriter.write(packageMap.values(), primitives);
 
             // Assert file exclusion
             File htmlFile1 = new File(outputFilePath1);
@@ -170,6 +189,11 @@ public class HtmlDocumentWriterTest {
         }
     }
 
+    private void deleteFiles(String ... filePaths) {
+        for(String filePath : filePaths) {
+            deleteFile(filePath);
+        }
+    }
 
     private void deleteFile(String filePath) {
         File htmlFile = new File(filePath);

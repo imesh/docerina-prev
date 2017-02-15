@@ -43,7 +43,7 @@ public class BallerinaDocGeneratorMain {
 
         try {
             String packagePath = args[0];
-            String packageFilter = (args[1] != null) ? args[1] : "";
+            String packageFilter = (args.length == 2) ? args[1] : "";
             Map<String, Package> docsMap = BallerinaDocGenerator.generatePackageDocsFromBallerina(
                     packagePath, packageFilter);
             List<BallerinaPrimitive> primitives = BallerinaDocGenerator.findPrimitiveTypes();

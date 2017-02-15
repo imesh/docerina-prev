@@ -94,7 +94,7 @@ public class BallerinaFunctionDocGenTest {
     public void testBalWithSameFuncSignature() {
         try {
             Map<String, Package> docsMap =
-                    BallerinaDocGeneratorMain.generatePackageDocsFromBallerina(
+                    BallerinaDocGenerator.generatePackageDocsFromBallerina(
                             resources + "balFuncWithSameSignature.bal");
             Assert.assertNotNull(docsMap);
             Assert.assertEquals(docsMap.size(), 1);

@@ -43,7 +43,7 @@ public class HtmlDocumentWriterTest {
         String userDir = System.getProperty("user.dir");
         String balPackagePath = userDir + File.separator + "src" + File.separator + "test" + File.separator
                 + "resources" + File.separator + "balFiles" + File.separator + "htmlWriter";
-        String outputPath =  userDir + File.separator + "api-docs" + File.separator + "html";
+        String outputPath = userDir + File.separator + "api-docs" + File.separator + "html";
         String outputFilePath1 = outputPath + File.separator + "foo.bar.html";
         String outputFilePath2 = outputPath + File.separator + "foo.bar.xyz.html";
         String outputFilePath3 = outputPath + File.separator + "foo.bar.xyz.str.html";
@@ -91,7 +91,7 @@ public class HtmlDocumentWriterTest {
                     + "<td>HTTP header key</td>"));
             // asserting function @return description
             Assert.assertTrue(content1.contains("<td>value</td><td><a href=\"#string\">string</a></td>"
-                            + "<td>HTTP header value</td>"));
+                    + "<td>HTTP header value</td>"));
 
             // asserting connector @description
             Assert.assertTrue(content1.contains("<p>Test connector</p>"));
@@ -154,15 +154,14 @@ public class HtmlDocumentWriterTest {
         String userDir = System.getProperty("user.dir");
         String balPackagePath = userDir + File.separator + "src" + File.separator + "test" + File.separator
                 + "resources" + File.separator + "balFiles" + File.separator + "htmlWriter";
-        String outputPath =  userDir + File.separator + "api-docs" + File.separator + "html";
+        String outputPath = userDir + File.separator + "api-docs" + File.separator + "html";
         String outputFilePath1 = outputPath + File.separator + "foo.bar.html";
         String outputFilePath2 = outputPath + File.separator + "foo.bar.xyz.html";
         String indexOutputFilePath = outputPath + File.separator + "index.html";
 
         try {
             // Delete if file already exists
-            deleteFile(outputFilePath1);
-            deleteFile(outputFilePath2);
+            deleteFiles(outputFilePath1, outputFilePath2, indexOutputFilePath);
 
             // Generate HTML file
             Map<String, Package> packageMap =
@@ -183,14 +182,12 @@ public class HtmlDocumentWriterTest {
             Assert.fail(e.getMessage());
         } finally {
             BallerinaDocGenTestUtils.cleanUp();
-            deleteFile(outputFilePath1);
-            deleteFile(outputFilePath2);
-            deleteFile(indexOutputFilePath);
+            deleteFiles(outputFilePath1, outputFilePath2, indexOutputFilePath);
         }
     }
 
-    private void deleteFiles(String ... filePaths) {
-        for(String filePath : filePaths) {
+    private void deleteFiles(String... filePaths) {
+        for (String filePath : filePaths) {
             deleteFile(filePath);
         }
     }
